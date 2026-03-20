@@ -38,4 +38,4 @@ How many °F?
 - [ ] Fix floating point errors
 - [ ] Support scientific notation (1.5e4)
 
-Built as a project to help me learn Rust.
+Built as a Rust learning project.
