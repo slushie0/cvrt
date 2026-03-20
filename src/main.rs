@@ -7,7 +7,7 @@ use strum_macros::EnumIter;
 struct Unit {
     name: &'static str,
     symbol: &'static str,
-    input: Option<&'static str>, // symbol in ascii format for CLI selection
+    cli_key: Option<&'static str>, // symbol in ascii format for CLI selection
     // conversion factor relative to a base unit
     // e.g. for Mass, base = kg: pound = 0.453592
     to_base: f64,
@@ -17,14 +17,14 @@ impl Unit {
     const fn new(
         name: &'static str,
         symbol: &'static str,
-        input: Option<&'static str>,
+        cli_key: Option<&'static str>,
         to_base: f64,
         offset: Option<f64>,
     ) -> Unit {
         Unit {
             name,
             symbol,
-            input,
+            cli_key,
             to_base,
             offset: match offset {
                 Some(o) => o,
@@ -128,7 +128,7 @@ fn ask_unit(property: &Property, direction: Direction) -> Unit {
         }
     );
     for unit in property.units() {
-        match unit.input {
+        match unit.cli_key {
             Some(i) => println!("{} -> {} ({})", i, unit.name, unit.symbol),
             None => println!("{} -> {}", unit.symbol, unit.name),
         }
@@ -137,7 +137,7 @@ fn ask_unit(property: &Property, direction: Direction) -> Unit {
         property
             .units()
             .iter()
-            .find(|u| u.input.unwrap_or(u.symbol).to_lowercase() == input)
+            .find(|u| u.cli_key.unwrap_or(u.symbol).to_lowercase() == input)
             .cloned()
     })
 }
