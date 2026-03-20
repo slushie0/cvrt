@@ -1,5 +1,5 @@
 use num_enum::TryFromPrimitive;
-use std::io;
+use std::io::{self, Write};
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
@@ -152,11 +152,14 @@ where
     F: Fn(&str) -> Option<T>,
 {
     loop {
+        print!("> ");
+        io::stdout().flush().expect("Failed to flush");
         let mut input = String::new();
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line");
         let input = input.trim().to_lowercase();
+        println!();
         match prompt(&input) {
             Some(value) => return value,
             None => println!("Invalid input, try again"),
@@ -176,7 +179,6 @@ fn main() {
 
     let from_unit: Unit = ask_unit(&property, Direction::From);
     let to_unit: Unit = ask_unit(&property, Direction::To);
-    println!();
 
     let quantity = ask_quantity(&from_unit);
 
